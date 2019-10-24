@@ -51,7 +51,7 @@ public class PublishController {
 
         User user = null;
         Cookie[] cookies = request.getCookies();
-        try {
+        if(cookies!=null&&cookies.length!=0){
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("token")) {
                     String token = cookie.getValue();
@@ -65,9 +65,6 @@ public class PublishController {
                     break;
                 }
             }
-        } catch (Exception e) {
-            request.getSession().setAttribute("error", "用户未登录");
-            return "publish";
         }
         if (user == null) {
             request.getSession().setAttribute("error", "用户未登录");

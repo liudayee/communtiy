@@ -15,8 +15,9 @@ public class IndexController {
     private UserMapper userMapper;
     @GetMapping("/")
     public String index(HttpServletRequest request) {
+
         Cookie[] cookies = request.getCookies();
-        try {
+        if(cookies!=null&&cookies.length!=0){
             for (Cookie cookie : cookies) {
                 if(cookie.getName().equals("token")){
                     String token = cookie.getValue();
@@ -25,9 +26,7 @@ public class IndexController {
                       request.getSession().setAttribute("user",user);
                   }
                 }
-            }
-        } catch (Exception e) {
-        }
+            }}
         return "index";
     }
 }
