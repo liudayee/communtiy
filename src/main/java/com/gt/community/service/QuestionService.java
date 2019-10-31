@@ -1,5 +1,6 @@
 package com.gt.community.service;
 
+import com.gt.community.dto.PaginationDTO;
 import com.gt.community.dto.QuesstionDTO;
 import com.gt.community.mapper.QuesstionMapper;
 import com.gt.community.mapper.UserMapper;
@@ -19,17 +20,29 @@ public class QuestionService {
     @Autowired
     private UserMapper userMapper;
 
-    public List<QuesstionDTO> list() {
-        List<Quesstion> quesstions = quesstionMapper.list();
+    public PaginationDTO list(Integer page, Integer size) {
+        PaginationDTO paginationDTO = new PaginationDTO();
+        Integer totalCount = quesstionMapper.count();
+        paginationDTO.setPagination(totalCount, page, size);
+        if (page < 1) {
+            page = 1;
+        }
+        if (page > paginationDTO.getTotaPage()) {
+            page = paginationDTO.getTotaPage();
+        }
+        //计算方式 size(page-1)
+        Integer offset = size * (page - 1);
+        List<Quesstion> quesstions = quesstionMapper.list(offset,size);
         List<QuesstionDTO> quesstionDTOList = new ArrayList<>();
         for (Quesstion quesstion : quesstions) {
-           User user = userMapper.findById(quesstion.getCreator());
-           QuesstionDTO quesstionDTO = new QuesstionDTO();
-           //复制对象属性从quesstion-quesstionDTO
-            BeanUtils.copyProperties(quesstion,quesstionDTO);
+            User user = userMapper.findById(quesstion.getCreator());
+            QuesstionDTO quesstionDTO = new QuesstionDTO();
+            //复制对象属性从quesstion-quesstionDTO
+            BeanUtils.copyProperties(quesstion, quesstionDTO);
             quesstionDTO.setUser(user);
             quesstionDTOList.add(quesstionDTO);
         }
-        return quesstionDTOList;
+        paginationDTO.setQuestions(quesstionDTOList);
+        return paginationDTO;
     }
 }
