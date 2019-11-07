@@ -16,19 +16,10 @@ public class PaginationDTO {
     private List<Integer> pages = new ArrayList<>();//展示的页码素数组
     private Integer totaPage;//分几页
 
-    public void setPagination(Integer totalCount, Integer page, Integer size) {
-        if (totalCount % size == 0) {
-            totaPage = totalCount / size;
-        } else {
-            totaPage = totalCount / size + 1;
-        }
-        if (page < 1) {
-            page = 1;
-        }
-        if (page > totalCount) {
-            page = totaPage;
-        }
+    public void setPagination(Integer totaPage, Integer page) {
+        this.totaPage = totaPage;
         this.page = page;
+
         pages.add(page);
         for (int i = 1; i <= 3; i++) {
             if (page - i > 0) {
@@ -57,7 +48,7 @@ public class PaginationDTO {
             showFirsPage = true;
         }
         //是否展示到尾页
-        if (pages.contains(totaPage)) {
+        if (pages.contains(totaPage)||totaPage==0) {
             showEndPage = false;
         } else {
             showEndPage = true;

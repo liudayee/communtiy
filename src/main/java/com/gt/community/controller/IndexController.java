@@ -1,7 +1,6 @@
 package com.gt.community.controller;
 
 import com.gt.community.dto.PaginationDTO;
-import com.gt.community.dto.QuesstionDTO;
 import com.gt.community.mapper.UserMapper;
 import com.gt.community.model.User;
 import com.gt.community.service.QuestionService;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 @Controller
 public class IndexController {
@@ -25,7 +23,7 @@ public class IndexController {
     public String index(HttpServletRequest request,
                         Model model,
                         @RequestParam(name ="page" ,defaultValue = "1") Integer page,
-                        @RequestParam(name="size", defaultValue ="10")Integer size) {
+                        @RequestParam(name="size", defaultValue ="5")Integer size) {
 
         Cookie[] cookies = request.getCookies();
         if(cookies!=null&&cookies.length!=0){

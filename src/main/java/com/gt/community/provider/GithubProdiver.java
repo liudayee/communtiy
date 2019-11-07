@@ -6,8 +6,6 @@ import com.gt.community.dto.GithubUser;
 import okhttp3.*;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-
 /**
  * 2019-10-4 12:24:20
  */
