@@ -1,7 +1,6 @@
 package com.gt.community.controller;
 
-import com.gt.community.mapper.QuesstionMapper;
-import com.gt.community.mapper.UserMapper;
+import com.gt.community.mapper.QuestionMapper;
 import com.gt.community.model.Quesstion;
 import com.gt.community.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,16 +10,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class PublishController {
     @Autowired
-    private QuesstionMapper quesstionMapper;
-
-    @Autowired
-    private UserMapper userMapper;
+    private QuestionMapper quesstionMapper;
 
     @GetMapping("/publish")
     public String publish() {
@@ -48,24 +43,7 @@ public class PublishController {
             request.getSession().setAttribute("error", "标签不能为空");
             return "publish";
         }
-
-        User user = null;
-        Cookie[] cookies = request.getCookies();
-        if(cookies!=null&&cookies.length!=0){
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("token")) {
-                    String token = cookie.getValue();
-                    user = userMapper.findByToken(token);
-                    if (user != null) {
-                        request.getSession().setAttribute("user", user);
-                    } else {
-                        request.getSession().setAttribute("error", "用户未登录");
-                        return "publish";
-                    }
-                    break;
-                }
-            }
-        }
+        User user =(User)request.getSession().getAttribute("user");
         if (user == null) {
             request.getSession().setAttribute("error", "用户未登录");
             return "publish";

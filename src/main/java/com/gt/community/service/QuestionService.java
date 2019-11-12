@@ -2,7 +2,7 @@ package com.gt.community.service;
 
 import com.gt.community.dto.PaginationDTO;
 import com.gt.community.dto.QuesstionDTO;
-import com.gt.community.mapper.QuesstionMapper;
+import com.gt.community.mapper.QuestionMapper;
 import com.gt.community.mapper.UserMapper;
 import com.gt.community.model.Quesstion;
 import com.gt.community.model.User;
@@ -16,14 +16,14 @@ import java.util.List;
 @Service
 public class QuestionService {
     @Autowired
-    private QuesstionMapper quesstionMapper;
+    private QuestionMapper questionMapper;
     @Autowired
     private UserMapper userMapper;
 
     public PaginationDTO list(Integer page, Integer size) {
         PaginationDTO paginationDTO = new PaginationDTO();
         Integer totaPage;
-        Integer totalCount = quesstionMapper.count();
+        Integer totalCount = questionMapper.count();
 
         if (totalCount % size == 0) {
             totaPage = totalCount / size;
@@ -39,7 +39,7 @@ public class QuestionService {
         paginationDTO.setPagination(totaPage, page);
         //计算方式 size(page-1)
         Integer offset = size * (page - 1);
-        List<Quesstion> quesstions = quesstionMapper.list(offset, size);
+        List<Quesstion> quesstions = questionMapper.list(offset, size);
         List<QuesstionDTO> quesstionDTOList = new ArrayList<>();
         for (Quesstion quesstion : quesstions) {
             User user = userMapper.findById(quesstion.getCreator());
@@ -53,11 +53,11 @@ public class QuestionService {
         return paginationDTO;
     }
 
-    public PaginationDTO listById(Integer userid, Integer page, Integer size) {
+    public PaginationDTO listById(Integer userId, Integer page, Integer size) {
 
         PaginationDTO paginationDTO = new PaginationDTO();
         Integer totaPage;
-        Integer totalCount = quesstionMapper.countById(userid);
+        Integer totalCount = questionMapper.countById(userId);
 
 
         if (totalCount % size == 0) {
@@ -76,7 +76,7 @@ public class QuestionService {
 
         //计算方式 size(page-1)
         Integer offset = size * (page - 1);
-        List<Quesstion> quesstions = quesstionMapper.listById(userid, offset, size);
+        List<Quesstion> quesstions = questionMapper.listById(userId, offset, size);
         List<QuesstionDTO> quesstionDTOList = new ArrayList<>();
         for (Quesstion quesstion : quesstions) {
             User user = userMapper.findById(quesstion.getCreator());
@@ -88,5 +88,13 @@ public class QuestionService {
         }
         paginationDTO.setQuestions(quesstionDTOList);
         return paginationDTO;
+    }
+
+    public QuesstionDTO getById(Integer id) {
+        Quesstion quesstion = questionMapper.getById(id);
+        QuesstionDTO quesstionDTO = new QuesstionDTO();
+        BeanUtils.copyProperties(quesstion, quesstionDTO);
+        quesstionDTO.setUser(userMapper.findById(quesstion.getCreator()));
+        return quesstionDTO;
     }
 }
