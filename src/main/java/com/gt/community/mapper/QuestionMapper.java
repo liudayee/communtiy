@@ -1,10 +1,7 @@
 package com.gt.community.mapper;
 
 import com.gt.community.model.Quesstion;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -20,12 +17,14 @@ public interface QuestionMapper {
     Integer count();
 
     @Select("select count(1) from question where creator=#{id}")
-    Integer countById(@Param(value = "id")Integer id);
+    Integer countById(@Param(value = "id") Integer id);
 
     @Select("select * from question where creator=#{userId} limit #{offset},#{size}")
-    List<Quesstion> listById(@Param(value = "userId")Integer userId, @Param(value = "offset") Integer offset, @Param(value = "size") Integer size);
+    List<Quesstion> listById(@Param(value = "userId") Integer userId, @Param(value = "offset") Integer offset, @Param(value = "size") Integer size);
 
     @Select("select * from question where id=#{id}")
-    Quesstion getById(@Param(value = "id")Integer id);
+    Quesstion getById(@Param(value = "id") Integer id);
 
+    @Update("update question set title=#{title},description=#{description},tag=#{tag},gmt_modified=#{gmtModified} where id=#{id}")
+    void update(Quesstion quesstion);
 }

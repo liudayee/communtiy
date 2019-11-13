@@ -33,7 +33,7 @@ public class QuestionService {
         if (page > totaPage) {
             page = totaPage;
         }
-        if (page < 1||totaPage==0) {
+        if (page < 1 || totaPage == 0) {
             page = 1;
         }
         paginationDTO.setPagination(totaPage, page);
@@ -68,7 +68,7 @@ public class QuestionService {
         if (page > totaPage) {
             page = totaPage;
         }
-        if (page < 1||totaPage==0) {
+        if (page < 1 || totaPage == 0) {
             page = 1;
         }
 
@@ -96,5 +96,18 @@ public class QuestionService {
         BeanUtils.copyProperties(quesstion, quesstionDTO);
         quesstionDTO.setUser(userMapper.findById(quesstion.getCreator()));
         return quesstionDTO;
+    }
+
+    public void createOrUpdate(Quesstion quesstion) {
+        if (quesstion.getId() == null) {
+            //创建
+            quesstion.setGmtCreate(System.currentTimeMillis());
+            quesstion.setGmtModified(quesstion.getGmtCreate());
+            questionMapper.create(quesstion);
+        } else {
+            //更新
+            quesstion.setGmtModified(System.currentTimeMillis());
+            questionMapper.update(quesstion);
+        }
     }
 }
